@@ -1,0 +1,440 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --rotom-orange:  #E05030;
+  --rotom-orange2: #C84020;
+  --rotom-teal:    #7ECECA;
+  --rotom-teal2:   #4EAEAD;
+  --rotom-screen:  #0B1A1A;
+  --rotom-screen2: #0E2222;
+  --rotom-glow:    rgba(126,206,202,0.55);
+  --rotom-glow2:   rgba(126,206,202,0.15);
+  --rotom-text:    #D4F0EE;
+  --rotom-muted:   #4A8A88;
+  --rotom-border:  #2A5A58;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  color: var(--rotom-text);
+  overflow-x: hidden;
+  background-color: #1a2a3a;
+  background-image: url('../Imagenes/POKEMONruta1.gif');
+  background-size: cover;
+  background-position: center bottom;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 30, 0.45);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── PÁGINA ── */
+.page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 2rem 1rem 3rem;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+/* ── parte alta ── */
+.bolt-top {
+  width: 0; height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 26px solid var(--rotom-orange);
+  position: relative;
+  margin-bottom: -2px;
+}
+.bolt-top::after {
+  content: '';
+  position: absolute;
+  top: 11px; left: -8px;
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 16px solid var(--rotom-orange);
+}
+
+/* ── cuerpo ── */
+.rotom-body {
+  width: 100%;
+  background: var(--rotom-orange);
+  border-radius: 24px;
+  border: 3px solid var(--rotom-orange2);
+  position: relative;
+  padding: 10px 16px 20px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.4),
+    inset 0 2px 0 rgba(255,255,255,0.15),
+    inset 0 -2px 0 rgba(0,0,0,0.2),
+    0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* ── CARA ROTOM PNG ── */
+.rotom-face-img {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+.rotom-face-img img {
+  width: 100px;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── PANTALLA ── */
+.screen {
+  background: var(--rotom-screen);
+  border-radius: 14px;
+  border: 2px solid var(--rotom-border);
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,0,0,0.3);
+}
+
+.screen-topbar {
+  background: var(--rotom-screen2);
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--rotom-border);
+}
+.screen-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--rotom-teal);
+  box-shadow: 0 0 5px var(--rotom-glow);
+}
+.screen-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--rotom-teal);
+  letter-spacing: 1px;
+}
+
+/* ── BÚSQUEDA ── */
+.search-area {
+  padding: 10px 12px 6px;
+  display: flex;
+  gap: 7px;
+}
+.search-input {
+  flex: 1;
+  background: var(--rotom-screen2);
+  border: 1.5px solid var(--rotom-border);
+  border-radius: 9px;
+  color: var(--rotom-text);
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input:focus {
+  border-color: var(--rotom-teal);
+  box-shadow: 0 0 0 2px var(--rotom-glow2);
+}
+.search-input::placeholder { color: var(--rotom-muted); }
+
+.search-btn {
+  background: var(--rotom-teal);
+  color: #0B1A1A;
+  border: none;
+  border-radius: 9px;
+  padding: 7px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.search-btn:hover  { background: var(--rotom-teal2); }
+.search-btn:active { transform: scale(0.96); }
+
+/* ── RESULTADO ── */
+.poke-result {
+  padding: 8px 12px 14px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.idle-msg {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--rotom-muted);
+  text-align: center;
+  line-height: 2.2;
+  margin-top: 60px;
+}
+.loader {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--rotom-teal);
+  text-align: center;
+  margin-top: 60px;
+  animation: pulse 0.9s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.error-msg {
+  font-size: 11px;
+  color: #ef9a9a;
+  text-align: center;
+  margin-top: 60px;
+  line-height: 1.9;
+}
+
+/* ── SPRITE FIJO ── */
+.sprite-wrap {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0 auto;
+}
+.sprite-wrap img {
+  max-width: 120px;
+  max-height: 120px;
+  width: auto;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 8px var(--rotom-glow));
+  transition: filter 0.2s, transform 0.2s;
+  display: block;
+}
+.sprite-wrap:hover img {
+  filter: drop-shadow(0 0 18px rgba(126,206,202,0.9));
+  transform: scale(1.08) translateY(-3px);
+}
+
+.sprite-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  margin: 4px 0 6px;
+}
+.sound-hint {
+  font-size: 9px;
+  color: var(--rotom-muted);
+  text-align: center;
+}
+.shiny-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  color: var(--rotom-muted);
+  cursor: pointer;
+  user-select: none;
+}
+.shiny-toggle input { display: none; }
+.shiny-track {
+  width: 28px; height: 15px;
+  background: var(--rotom-screen2);
+  border-radius: 8px;
+  border: 1px solid var(--rotom-border);
+  position: relative;
+  transition: background 0.2s;
+}
+.shiny-toggle input:checked + .shiny-track { background: #7b4f00; border-color: #f59e0b; }
+.shiny-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--rotom-muted);
+  transition: transform 0.2s, background 0.2s;
+}
+.shiny-toggle input:checked + .shiny-track .shiny-thumb {
+  transform: translateX(13px);
+  background: #f59e0b;
+}
+
+/* ── NOMBRE ── */
+.poke-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--rotom-teal);
+  text-transform: capitalize;
+  text-align: center;
+  margin-bottom: 3px;
+  text-shadow: 0 0 8px var(--rotom-glow);
+}
+.poke-meta {
+  font-size: 10px;
+  color: var(--rotom-muted);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+/* ── TIPOS ── */
+.types-row {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.type-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+
+/* ── BADGES ── */
+.badges-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.badge {
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.badge.legendary { background: #4a1a7a; color: #d8b4fe; }
+.badge.mythical  { background: #7a0a30; color: #fda4af; }
+.badge.pseudo    { background: #1a2a7a; color: #a5b4fc; }
+
+/* ── STATS ── */
+.stats-section { width: 100%; margin-top: 4px; }
+.stats-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  color: var(--rotom-teal);
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.stat-row { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+.stat-name {
+  font-size: 8px;
+  color: var(--rotom-teal);
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+.stat-bar-bg {
+  flex: 1;
+  height: 5px;
+  background: var(--rotom-screen2);
+  border-radius: 3px;
+  border: 1px solid var(--rotom-border);
+  overflow: hidden;
+}
+.stat-bar { height: 100%; border-radius: 3px; transition: width 0.7s cubic-bezier(.4,0,.2,1); }
+.stat-val { font-size: 9px; color: var(--rotom-text); width: 24px; text-align: right; flex-shrink: 0; }
+
+/* ── MOVIMIENTOS ── */
+.moves-section { width: 100%; margin-top: 8px; }
+.moves-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  color: var(--rotom-teal);
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.moves-list { display: flex; flex-wrap: wrap; gap: 3px; }
+.move-chip {
+  background: var(--rotom-screen2);
+  border: 1px solid var(--rotom-border);
+  color: #90caf9;
+  font-size: 8px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  text-transform: capitalize;
+  transition: border-color 0.15s;
+}
+.move-chip:hover { border-color: var(--rotom-teal); }
+
+/* ── BOTONES ── */
+.rotom-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding: 0 6px;
+}
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 20px);
+  grid-template-rows: repeat(3, 20px);
+  gap: 2px;
+}
+.dp {
+  background: var(--rotom-orange2);
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.dp:hover  { background: #A83010; }
+.dp.center { background: var(--rotom-orange); cursor: default; border-radius: 50%; }
+.dp.empty  { background: transparent; border: none; cursor: default; }
+
+.ab-btns { display: flex; gap: 8px; align-items: center; }
+.abtn {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.3);
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  transition: filter 0.1s, transform 0.1s;
+}
+.abtn:hover  { filter: brightness(1.2); }
+.abtn:active { transform: scale(0.92); }
+.abtn.a { background: #c0392b; }
+.abtn.b { background: var(--rotom-orange2); }
+
+/* ── RAYO INFERIOR ── */
+.bolt-bottom {
+  width: 0; height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 26px solid var(--rotom-orange);
+  position: relative;
+  margin-top: -2px;
+}
+.bolt-bottom::after {
+  content: '';
+  position: absolute;
+  top: -26px; left: -8px;
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 16px solid var(--rotom-orange);
+}

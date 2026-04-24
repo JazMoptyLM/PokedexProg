@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rotom Pokédex</title>
+  <link rel="stylesheet" href="../Estilos/poke.css"/>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="bolt-top"></div>
+
+  <div class="rotom-body">
+
+    <div class="rotom-face-img">
+    <img src="../Imagenes/rotom_face.png" alt="Rotom face"/>   
+    </div>
+
+    <div class="screen">
+      <div class="screen-topbar">
+        <div class="screen-dot"></div>
+        <span class="screen-title">NATIONAL POKÉDEX</span>
+      </div>
+      <div class="search-area">
+        <input class="search-input" type="text" id="searchInput" placeholder="nombre o número..." autocomplete="off"/>
+        <button class="search-btn" onclick="buscarPokemon()">OK</button>
+      </div>
+      <div class="poke-result" id="resultado">
+        <div class="idle-msg">Hola! Soy Rotom.<br><br>Buscá cualquier<br>Pokémon por nombre<br>o número.</div>
+      </div>
+    </div>
+
+    <div class="rotom-buttons">
+      <div class="dpad">
+        <div class="dp empty"></div><div class="dp"></div><div class="dp empty"></div>
+        <div class="dp"></div><div class="dp center"></div><div class="dp"></div>
+        <div class="dp empty"></div><div class="dp"></div><div class="dp empty"></div>
+      </div>
+      <div class="ab-btns">
+        <button class="abtn b">B</button>
+        <button class="abtn a">A</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bolt-bottom"></div>
+
+</div>
+
+<script>
+  const TYPE_COLORS = {
+    normal:{bg:'#9e9e9e',text:'#fff'}, fire:{bg:'#e64a19',text:'#fff'},
+    water:{bg:'#1565c0',text:'#fff'}, electric:{bg:'#f9a825',text:'#1a1a1a'},
+    grass:{bg:'#2e7d32',text:'#fff'}, ice:{bg:'#006064',text:'#fff'},
+    fighting:{bg:'#b71c1c',text:'#fff'}, poison:{bg:'#6a1b9a',text:'#fff'},
+    ground:{bg:'#4e342e',text:'#fff'}, flying:{bg:'#283593',text:'#fff'},
+    psychic:{bg:'#c62828',text:'#fff'}, bug:{bg:'#558b2f',text:'#fff'},
+    rock:{bg:'#5d4037',text:'#fff'}, ghost:{bg:'#4a148c',text:'#fff'},
+    dragon:{bg:'#1a237e',text:'#fff'}, dark:{bg:'#263238',text:'#fff'},
+    steel:{bg:'#37474f',text:'#fff'}, fairy:{bg:'#880e4f',text:'#fff'},
+  };
+  const STAT_COLORS = {
+    'hp':'#e53935','attack':'#fb8c00','defense':'#fdd835',
+    'speed':'#4fc3f7','special-attack':'#9c27b0','special-defense':'#43a047',
+  };
+  const STAT_ABREV = {
+    'hp':'HP','attack':'ATK','defense':'DEF',
+    'special-attack':'SpA','special-defense':'SpD','speed':'SPE'
+  };
+  const STAT_MAX = 255;
+  let audioActual = null;
+  let datosActuales = null;
+
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') buscarPokemon();
+  });
+
+  function reproducirGrito(nombre) {
+    if (audioActual) { audioActual.pause(); audioActual = null; }
+    const a = new Audio('https://play.pokemonshowdown.com/audio/cries/' + nombre.toLowerCase() + '.mp3');
+    a.volume = 0.55;
+    a.play().catch(() => {});
+    audioActual = a;
+  }
+
+  async function buscarPokemon() {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    if (!q) return;
+    const res = document.getElementById('resultado');
+    res.innerHTML = '<div class="loader">Buscando...</div>';
+    try {
+      const [pRes, sRes] = await Promise.all([
+        fetch('https://pokeapi.co/api/v2/pokemon/' + q),
+        fetch('https://pokeapi.co/api/v2/pokemon-species/' + q)
+      ]);
+      if (!pRes.ok) throw new Error();
+      const p = await pRes.json();
+      const s = sRes.ok ? await sRes.json() : null;
+      datosActuales = p;
+      renderPokemon(p, s, false);
+    } catch {
+      res.innerHTML = '<div class="error-msg">El pokemon ingresado no esta registrado.<br>Probá con otro nombre o número.</div>';
+    }
+  }
+
+  function renderPokemon(p, s, shiny) {
+    const sprites = p.sprites;
+    const spriteUrl = shiny
+      ? (sprites?.other?.['official-artwork']?.front_shiny || sprites?.front_shiny)
+      : (sprites?.other?.['official-artwork']?.front_default || sprites?.front_default);
+
+    const tipos = p.types.map(t => t.type.name);
+    const stats = p.stats;
+    const movimientos = p.moves.slice(0, 14).map(m => m.move.name);
+    const esLegendario = s?.is_legendary;
+    const esMitico = s?.is_mythical;
+    const totalBase = stats.reduce((a, x) => a + x.base_stat, 0);
+    const esPseudo = !esLegendario && !esMitico && totalBase >= 550 && (s?.capture_rate <= 45);
+
+    const tiposHTML = tipos.map(t => {
+      const c = TYPE_COLORS[t] || {bg:'#555',text:'#fff'};
+      return '<span class="type-badge" style="background:' + c.bg + ';color:' + c.text + '">' + t + '</span>';
+    }).join('');
+
+    let badgesHTML = '';
+    if (esLegendario) badgesHTML += '<span class="badge legendary">Legendario</span>';
+    if (esMitico)     badgesHTML += '<span class="badge mythical">Mítico</span>';
+    if (esPseudo)     badgesHTML += '<span class="badge pseudo">Pseudo-legendario</span>';
+
+    const statsHTML = stats.map(st =>
+      '<div class="stat-row">' +
+        '<div class="stat-name">' + (STAT_ABREV[st.stat.name] || st.stat.name.slice(0,3).toUpperCase()) + '</div>' +
+        '<div class="stat-bar-bg"><div class="stat-bar" style="width:' + Math.round(st.base_stat/STAT_MAX*100) + '%;background:' + (STAT_COLORS[st.stat.name]||'#4fc3f7') + '"></div></div>' +
+        '<div class="stat-val">' + st.base_stat + '</div>' +
+      '</div>'
+    ).join('');
+
+    const movesHTML = movimientos
+      .map(m => '<span class="move-chip">' + m.replace(/-/g,' ') + '</span>')
+      .join('');
+
+    document.getElementById('resultado').innerHTML =
+      '<div class="sprite-wrap" onclick="reproducirGrito(\'' + p.name + '\')" title="Escuchar grito">' +
+        '<img id="pokesprite" src="' + spriteUrl + '" alt="' + p.name + '"/>' +
+      '</div>' +
+      '<div class="sprite-controls">' +
+        '<div class="sound-hint">clic para escuchar el grito</div>' +
+        '<label class="shiny-toggle">' +
+          '<input type="checkbox" id="shinyCheck" onchange="toggleShiny(this.checked)"/>' +
+          '<div class="shiny-track"><div class="shiny-thumb"></div></div>' +
+          '✦ shiny' +
+        '</label>' +
+      '</div>' +
+      '<div class="poke-name">' + p.name + '</div>' +
+      '<div class="poke-meta">#' + String(p.id).padStart(4,'0') +
+        ' &nbsp;·&nbsp; ' + (p.height/10).toFixed(1) + 'm' +
+        ' &nbsp;·&nbsp; ' + (p.weight/10).toFixed(1) + 'kg' +
+        ' &nbsp;·&nbsp; BST ' + totalBase + '</div>' +
+      '<div class="types-row">' + tiposHTML + '</div>' +
+      (badgesHTML ? '<div class="badges-row">' + badgesHTML + '</div>' : '') +
+      '<div class="stats-section"><div class="stats-title">— Stats base —</div>' + statsHTML + '</div>' +
+      '<div class="moves-section"><div class="moves-title">— Movimientos —</div><div class="moves-list">' + movesHTML + '</div></div>';
+  }
+
+  function toggleShiny(activado) {
+    if (!datosActuales) return;
+    const sprites = datosActuales.sprites;
+    const url = activado
+      ? (sprites?.other?.['official-artwork']?.front_shiny || sprites?.front_shiny || sprites?.front_default)
+      : (sprites?.other?.['official-artwork']?.front_default || sprites?.front_default);
+    const img = document.getElementById('pokesprite');
+    if (img && url) img.src = url;
+  }
+</script>
+</body>
+</html>
