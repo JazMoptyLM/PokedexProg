@@ -1,22 +1,19 @@
-/* importo las fuentes: Press Start 2P para el estilo pixel art de la pokedex e Inter para el texto normal */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap');
 
-/* variables globales de colores del tema de rotom, las uso en todo el css para mantener consistencia */
 :root {
-  --rotom-orange:  #E05030;   /* naranja principal del cuerpo de la pokedex */
-  --rotom-orange2: #C84020;   /* naranja mas oscuro para bordes y detalles */
-  --rotom-teal:    #7ECECA;   /* celeste verdoso de la pantalla y textos importantes */
-  --rotom-teal2:   #4EAEAD;   /* celeste mas oscuro para hovers */
-  --rotom-screen:  #0B1A1A;   /* fondo de la pantalla, verde muy oscuro tipo lcd vieja */
-  --rotom-screen2: #0E2222;   /* fondo alternativo un poco mas claro para inputs y chips */
-  --rotom-glow:    rgba(126,206,202,0.55);  /* brillo celeste que uso en sombras y filtros */
-  --rotom-glow2:   rgba(126,206,202,0.15);  /* version mas tenue del brillo para el focus del input */
-  --rotom-text:    #D4F0EE;   /* color principal del texto, un blanco azulado */
-  --rotom-muted:   #4A8A88;   /* texto secundario, mas apagado */
-  --rotom-border:  #2A5A58;   /* color de los bordes dentro de la pantalla */
+  --rotom-orange:  #E05030;  
+  --rotom-orange2: #C84020;   
+  --rotom-teal:    #7ECECA;   
+  --rotom-teal2:   #4EAEAD;   
+  --rotom-screen:  #0B1A1A;   
+  --rotom-screen2: #0E2222;   
+  --rotom-glow:    rgba(126,206,202,0.55);  
+  --rotom-glow2:   rgba(126,206,202,0.15);
+  --rotom-text:    #D4F0EE;   
+  --rotom-muted:   #4A8A88;  
+  --rotom-border:  #2A5A58;  
 }
 
-/* reset basico para que todos los elementos arranquen sin margenes ni padding por defecto */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* fondo de la pagina: un gif de la ruta 1 de pokemon que ocupa toda la pantalla */
@@ -44,7 +41,7 @@ body::before {
   pointer-events: none; /* no bloquea los clics del usuario */
 }
 
-/* ── contenedor principal de la pagina ── */
+/* contenedor principal de la pagina */
 /* centra todo verticalmente y limita el ancho para que quede como un dispositivo */
 .page {
   position: relative;
@@ -184,7 +181,7 @@ body::before {
 .search-btn:hover  { background: var(--rotom-teal2); }
 .search-btn:active { transform: scale(0.96); } /* se achica un poco al hacer clic */
 
-/* ── area de resultado ── */
+/* area de resultado */
 /* tiene una altura minima para que la pantalla no se encoja cuando no hay resultado */
 .poke-result {
   padding: 8px 12px 14px;
@@ -302,7 +299,7 @@ body::before {
   background: #f59e0b;
 }
 
-/* ── nombre del pokemon ── */
+/* nombre del pokemon */
 .poke-name {
   font-family: 'Press Start 2P', monospace;
   font-size: 9px;
